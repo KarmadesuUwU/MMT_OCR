@@ -1,5 +1,5 @@
 # MMT_OCR
-Artificial Vision System to Metrology System Reports
+Artificial Vision System for Metrology System Reports
 
     Created by Rafael A.H. in Apr. 2025
        
