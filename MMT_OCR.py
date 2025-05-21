@@ -8,6 +8,17 @@ import matplotlib.pyplot as plt
 from tkinter import Tk, filedialog
 import csv
 
+import re
+
+def clean_ocr_value(value):
+    # Reemplaza doble punto por uno solo
+    value = value.replace('..', '.')
+    # Reemplaza coma decimal por punto solo si parece número
+    value = re.sub(r'(?<=\d),(?=\d)', '.', value)
+    # Elimina espacios extra
+    value = value.strip()
+    return value
+
 global Nserie, Nof, Mac
 
 def resource_path(relative_path):
@@ -106,7 +117,7 @@ def pdf_to_text(pdf_path, output_dir):
 
                 # Extract text from cropped image and Indexing data ------------------------>>>>>>>
                 text = reader.readtext(cropped_image_path, detail=0)
-                print(text)
+                print(text)                     #Comentar para que dejen de molestar
                 
                 # Display the preprocessed image using matplotlib 
                 """
@@ -164,8 +175,8 @@ def pdf_to_text(pdf_path, output_dir):
                 #Pag 4
                 if page_number == 3:                                                 #Setup parameters
                     if rect_idx == 0:
-                        print(f"{Nof} {Nserie} D123 {text[0].split('/')[0]}")              
-                        all_text.append(f"{Nof} {Nserie} D123 {text[0].split('/')[0]}")     #D123
+                        print(f"{Nof} {Nserie} D123 {float(text[0].split('/')[0]) * 2}")              
+                        all_text.append(f"{Nof} {Nserie} D123 {float(text[0].split('/')[0]) * 2}")     #D123
                     
                     elif rect_idx == 1:
                         print(f"{Nof} {Nserie} N11-14-FA {text[0]}")              
@@ -265,7 +276,7 @@ def pdf_to_text(pdf_path, output_dir):
 
                 # Extract text from cropped image
                 text = reader.readtext(cropped_image_path, detail=0)
-                print(text)
+                print(text)             #Comentar para que dejen de molestar
                 
                 # Display the preprocessed image using matplotlib 
                 """
@@ -319,8 +330,8 @@ def pdf_to_text(pdf_path, output_dir):
                     
                 if page_number == 2:                                                 #Setup parameters
                     if rect_idx == 0:
-                        print(f"{Nof} {Nserie} D123 {text[0].split('/')[0]}")              
-                        all_text.append(f"{Nof} {Nserie} D123 {text[0].split('/')[0]}")     #D123
+                        print(f"{Nof} {Nserie} D123 {float(text[0].split('/')[0]) * 2}")              
+                        all_text.append(f"{Nof} {Nserie} D123 {float(text[0].split('/')[0]) * 2}")     #D123
                     
                     elif rect_idx == 1:
                         print(f"{Nof} {Nserie} N11-14-FA {text[0]}")              
@@ -427,7 +438,7 @@ def pdf_to_text(pdf_path, output_dir):
 
                 # Extract text from cropped image
                 text = reader.readtext(cropped_image_path, detail=0)
-                print(f"{text}")
+                print(f"{text}")            #Comentar para que dejen de molestar
                 
                 # Display the preprocessed image using matplotlib (optional)
                 """
@@ -521,8 +532,8 @@ def pdf_to_text(pdf_path, output_dir):
                 #Pag 26 (25 da igual)            
                 if page_number == 25:                                                 #Setup parameters
                     if rect_idx == 0:
-                        print(f"{Nof} {Nserie} D123 {text[0].split('/')[0]}")              
-                        all_text.append(f"{Nof} {Nserie} D123 {text[0].split('/')[0]}")     #D123
+                        print(f"{Nof} {Nserie} D123 {float(text[0].split('/')[0]) * 2}")              
+                        all_text.append(f"{Nof} {Nserie} D123 {float(text[0].split('/')[0]) * 2}")     #D123
                     
                     elif rect_idx == 1:
                         print(f"{Nof} {Nserie} N11-14-FA {text[0]}")              
@@ -601,7 +612,8 @@ if __name__ == "__main__":
         for line in extracted_text.split("\n\n"):
             parts = line.split()
             if len(parts) >= 4:
-                csv_writer.writerow([parts[0], parts[1], parts[2], parts[3]])
+                valor_limpio = clean_ocr_value(parts[3])
+                csv_writer.writerow([parts[0], parts[1], parts[2], valor_limpio])
 
     print(f"Extracted text saved to {csv_file_path}")
 
